@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Page Reveal Effects | Codrops</title>
+		<meta name="description" content="Some inspiration for multi-layer page reveal effects" />
+		<meta name="keywords" content="overlay, reveal, effect, page transition, inspiration, javascript" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,600|Merriweather:400' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/select-css.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<script src="js/modernizr-custom.js"></script>
+	</head>
+	<body>
+		<!-- SVG symbol used for navigation arrows -->
+		<svg class="hidden">
+			<defs>
+				<symbol id="icon-arrow" viewBox="0 0 39 51.43">
+					<title>Arrow Left</title>
+					<polygon points="7 25.71 36 45.71 36 26.08 36 5.71 7 25.71" stroke-miterlimit="10" stroke-width="6"/><line x1="3" y1="5.71" x2="3" y2="45.71" fill="none" stroke-miterlimit="10" stroke-width="6"/>
+				</symbol>
+			</defs>
+		</svg>
+		<main class="container">
+			<div class="pages">
+				<div class="page page--current"><!-- intro page -->
+					<header class="codrops-header">
+						<div class="codrops-links">
+							<a class="codrops-icon codrops-icon--prev" href="http://tympanus.net/Development/IsometricGrids/" title="Previous Demo"><span>Previous Demo</span></a>
+							<a class="codrops-icon codrops-icon--drop" href="http://tympanus.net/codrops/?p=27125" title="Back to the article"><span>Back to the Codrops article</span></a>
+						</div>
+						<h1 class="codrops-header__title">Multi-Layer Page Transition Effects</h1>
+						<div class="codrops-header__subbox">
+							<span>Choose an effect:</span>
+							<div class="custom-select">
+								<select name="select" id="select-effect">
+									<option value="effect-3" data-layers="3" data-colors="#0092DD,#fff,#3E3A35" selected>Triple Swoosh</option> 
+									<option value="effect-1" data-layers="1" data-colors="#202023">Simple</option>
+									<option value="effect-2" data-layers="2" data-colors="#202023,#3D4A41">Duo Move</option>
+									<option value="effect-4" data-layers="3" data-colors="#202023,#555,#d1d1d1">Content Move</option>
+								</select>
+							</div>
+						</div>
+					</header>
+					<a class="pater" href="http://goo.gl/ws0zHr">
+						<img class="pater__img" src="img/HackReactorLogo.svg" alt="Hack Reactor" />
+						<div class="pater__text">
+							<h2 class="pater__title">Your CS success starts here.</h2>
+							<p class="pater__desc">Hack Reactor's 12-week immersive coding school is accepting applications for onsite and online courses. <strong>Apply now and become a software engineer.</strong></p>
+						</div>
+					</a>
+				</div><!-- /page -->
+				<div class="page">
+					<blockquote class="quote">
+						<p>A good programmer is someone who always looks both ways before crossing a one-way street. </p>
+						<footer>Doug Linder</footer>
+					</blockquote>
+				</div>
+			</div><!-- /pages -->
+			<nav class="pagenav">
+				<button class="pagenav__button pagenav__button--top" aria-label="Navigate top"><svg class="icon icon--rtop"><use xlink:href="#icon-arrow"></use></svg></button>
+				<button class="pagenav__button pagenav__button--left" aria-label="Navigate left"><svg class="icon"><use xlink:href="#icon-arrow"></use></svg></button>
+				<button class="pagenav__button pagenav__button--right" aria-label="Navigate right"><svg class="icon icon--rright"><use xlink:href="#icon-arrow"></use></svg></button>
+				<button class="pagenav__button pagenav__button--bottom" aria-label="Navigate bottom"><svg class="icon icon--rbottom"><use xlink:href="#icon-arrow"></use></svg></button>
+				<button class="pagenav__button pagenav__button--cornertopleft" aria-label="Navigate top left"><svg class="icon icon--rtopleft"><use xlink:href="#icon-arrow"></use></svg></button>
+				<button class="pagenav__button pagenav__button--cornertopright" aria-label="Navigate top right"><svg class="icon icon--rtopright"><use xlink:href="#icon-arrow"></use></svg></button>
+				<button class="pagenav__button pagenav__button--cornerbottomleft" aria-label="Navigate bottom left"><svg class="icon icon--rbottomleft"><use xlink:href="#icon-arrow"></use></svg></button>
+				<button class="pagenav__button pagenav__button--cornerbottomright" aria-label="Navigate bottom right"><svg class="icon icon--rbottomright"><use xlink:href="#icon-arrow"></use></svg></button>
+			</nav>
+		</main>
+		<script src="js/classie.js"></script>
+		<script src="js/main.js"></script>
+		<script>
+		(function() {
+			var pages = [].slice.call(document.querySelectorAll('.pages > .page')),
+				currentPage = 0,
+				
+				revealerOpts = {
+					// the layers are the elements that move from the sides
+					nmbLayers : 3,
+					// bg color of each layer
+					bgcolor : ['#0092DD', '#fff', '#3E3A35'],
+					// effect classname
+					effect : 'anim--effect-3',
+					onStart : function(direction) {
+						// next page gets class page--animate-[direction]
+						var nextPage = pages[currentPage === 0 ? 1 : 0];
+						classie.add(nextPage, 'page--animate-' + direction);
+					},
+					onEnd : function(direction) {
+						// remove class page--animate-[direction] from next page
+						var nextPage = pages[currentPage === 0 ? 1 : 0];
+						nextPage.className = 'page';
+					}
+				};
+				revealer = new Revealer(revealerOpts);
+
+			// clicking the page nav buttons
+			document.querySelector('button.pagenav__button--top').addEventListener('click', function() { reveal('top'); });
+			document.querySelector('button.pagenav__button--left').addEventListener('click', function() { reveal('left'); });
+			document.querySelector('button.pagenav__button--right').addEventListener('click', function() { reveal('right'); });
+			document.querySelector('button.pagenav__button--bottom').addEventListener('click', function() { reveal('bottom'); });
+			document.querySelector('button.pagenav__button--cornertopleft').addEventListener('click', function() { reveal('cornertopleft'); });
+			document.querySelector('button.pagenav__button--cornertopright').addEventListener('click', function() { reveal('cornertopright'); });
+			document.querySelector('button.pagenav__button--cornerbottomleft').addEventListener('click', function() { reveal('cornerbottomleft'); });
+			document.querySelector('button.pagenav__button--cornerbottomright').addEventListener('click', function() { reveal('cornerbottomright'); });
+
+			// triggers the effect by calling instance.reveal(direction, callbackTime, callbackFn)
+			function reveal(direction) {
+				var callbackTime = 750,
+					callbackFn = function() {
+						classie.remove(pages[currentPage], 'page--current');
+						currentPage = currentPage === 0 ? 1 : 0;
+						classie.add(pages[currentPage], 'page--current');	
+					};
+
+				revealer.reveal(direction, callbackTime, callbackFn);
+			}
+
+			// changing the effect..
+			var effectCtrl = document.getElementById('select-effect');
+			effectCtrl.addEventListener('change', changeEffect);
+			// force it to be the first opt as default
+			effectCtrl.value = 'effect-3';
+
+			function changeEffect() {
+				revealer.destroy();
+				var revealerOpts = {
+					// the layers are the elements that move from the sides
+					nmbLayers : Number(this.options[this.selectedIndex].getAttribute('data-layers')),
+					// bg color of each layer
+					bgcolor : this.options[this.selectedIndex].getAttribute('data-colors').split(','),
+					// effect classname
+					effect : 'anim--' + this.value,
+					onStart : function(direction) {
+						// next page gets class page--animate-[direction]
+						var nextPage = pages[currentPage === 0 ? 1 : 0];
+						classie.add(nextPage, 'page--animate-' + direction);
+					},
+					onEnd : function(direction) {
+						// remove class page--animate-[direction] from next page
+						var nextPage = pages[currentPage === 0 ? 1 : 0];
+						nextPage.className = 'page';
+					}
+				};
+				
+				revealer = new Revealer(revealerOpts);
+			}
+		})();
+		</script>
+	</body>
+</html>
